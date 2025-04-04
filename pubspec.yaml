@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  # 비동기 HTTP통신 라이브러리 추가
+  dio: ^5.8.0+1
+  # 플러터SDK 라이브러리 추가
   flutter:
     sdk: flutter
 
