@@ -9,7 +9,7 @@ class GetScreen extends StatefulWidget {
 
 class _GetScreenState extends State<GetScreen> {
   final dio = Dio();
-  final String baseUrl = 'http://192.168.75.101:8080/day02/book';
+  final String baseUrl = 'http://192.168.75.101:8080/_day02/book';
   late Future<List<dynamic>> _dataFuture; // Future를 사용하여 비동기 데이터 처리
 
   @override
@@ -57,7 +57,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final dio = Dio();
-  final String baseUrl = 'http://192.168.75.101:8080/day02/book';
+  final String baseUrl = 'http://192.168.75.101:8080/_day02/book';
   final titleController = TextEditingController();
   final authorController = TextEditingController();
   final publisherController = TextEditingController();
