@@ -6,13 +6,13 @@ void main(){
 
 class MyStatefulApp2 extends StatefulWidget {
   @override
-  _MyStatefulApp2State createState() => _MyStatefulApp2State();
+  MyStatefulApp2State createState() => MyStatefulApp2State();
 }
 
-class _MyStatefulApp2State extends State<MyStatefulApp2> {
+class MyStatefulApp2State extends State<MyStatefulApp2> {
   int count = 0;
 
-  void _increment() {
+  void increment() {
     setState(() {
       count++;
     });
@@ -28,7 +28,7 @@ class _MyStatefulApp2State extends State<MyStatefulApp2> {
             children: [
               Text("Stateful 본문입니다 : $count"),
               ElevatedButton(
-                onPressed: _increment,
+                onPressed: increment,
                 child: Text("클릭"),
               )
             ],

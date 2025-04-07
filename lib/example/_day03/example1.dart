@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 void main(){
-  //runApp( MyStatelessApp() );
-  //runApp( MyStatelessApp2() );
+  // runApp( MyStatelessApp() );
+  // runApp( MyStatelessApp2() );
   runApp( MyStatelessApp3() );
 }
 
@@ -43,7 +43,7 @@ class MyStatelessApp2 extends StatelessWidget {
 
   int count = 0;
 
-  void _increment() {
+  void increment() {
       count++;
   }
 
@@ -57,7 +57,7 @@ class MyStatelessApp2 extends StatelessWidget {
               children: [
                 Text("Stateless 본문입니다 : $count"),
                 TextButton(
-                    onPressed: _increment, // 함수만 전달
+                    onPressed: increment, // 함수만 전달
                     child: Text("클릭"),
                 )
               ],

@@ -2,54 +2,107 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 void main() {
-  runApp(MyTodoApp());
+  runApp(MyStatefulApp2());
 }
 
-class MyTodoApp extends StatefulWidget {
+class MyStatefulApp2 extends StatefulWidget {
   @override
-  MyTodoAppState createState() => MyTodoAppState();
+  MyStatefulApp2State createState() => MyStatefulApp2State();
 }
 
-class MyTodoAppState extends State<MyTodoApp> {
-  final Dio dio = Dio();
-  List<dynamic> todoList = [];
+class MyStatefulApp2State extends State<MyStatefulApp2> {
+  final Dio _dio = Dio();
+  String responseText = "서버 응답이 여기에 표시됩니다";
+
+  List<dynamic> todoList = []; // ⭐ 전체 목록 저장
+
+  void _sendTodo() async {
+    try {
+      Map<String, dynamic> todoData = {
+        "title": "운동하기",
+        "content": "헬스장 가서 유산소 30분",
+        "done": false,
+      };
+
+      final response = await _dio.post(
+        "http://localhost:8080/day04/todos", // ⭐ 에뮬레이터면 10.0.2.2, 실제 기기면 IP
+        data: todoData,
+      );
+
+      setState(() {
+        responseText = "응답: ${response.data}";
+      });
+
+      _fetchTodos(); // 등록 후 목록 다시 불러오기
+    } catch (e) {
+      setState(() {
+        responseText = "에러 발생: $e";
+      });
+    }
+  }
+
+  void _fetchTodos() async {
+    try {
+      final response = await _dio.get("http://localhost:8080/day04/todos");
+
+      setState(() {
+        todoList = response.data;
+      });
+    } catch (e) {
+      setState(() {
+        responseText = "조회 에러: $e";
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    fetchTodos();
-  }
-
-  void fetchTodos() async {
-    try {
-      final res = await dio.get("http://localhost:8080/day04/todos");
-      setState( () {todoList = res.data; } );
-    } catch (e) {
-      setState( () {todoList = []; } );
-    }
+    _fetchTodos(); // 앱 시작 시 할 일 불러오기
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("할 일 목록")),
-        body: ListView(
-          // children: [
-          //   for (int i = 0; i < todoList.length; i++)
-          //     ListTile(
-          //       title: Text(todoList[i]['title']),
-          //       subtitle: Text(  "${todoList[i]['content']}\n상태: ${todoList[i]['done']}\n날짜: ${todoList[i]['createAt']}",   ),
-          //     ),
-          // ],
-          children: todoList.map((t) {
-            return ListTile(
-              title: Text(t['title']),
-              subtitle: Text(
-                "${t['content']}\n상태: ${t['done']}\n날짜: ${t['createAt']}",
+        appBar: AppBar(title: Text("할 일 등록 예제")),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(responseText),
+              ElevatedButton(
+                onPressed: _sendTodo,
+                child: Text("할 일 등록하기"),
               ),
-            );
-          }).toList(),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: todoList.length,
+                  itemBuilder: (context, index) {
+                    final todo = todoList[index];
+                    return Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        title: Text(todo['title'], style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 4),
+                            Text(todo['content']),
+                            SizedBox(height: 4),
+                            Text("상태: ${todo['done'] ? '완료됨 ✅' : '미완료 ❌'}"),
+                            Text("등록일: ${todo['createAt']}"),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

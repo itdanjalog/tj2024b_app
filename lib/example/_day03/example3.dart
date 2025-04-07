@@ -2,41 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 void main() {
-  runApp(MyStatefulApp2());
+  runApp(MyTodoApp());
 }
 
-class MyStatefulApp2 extends StatefulWidget {
+class MyTodoApp extends StatefulWidget {
   @override
-  _MyStatefulApp2State createState() => _MyStatefulApp2State();
+  MyTodoAppState createState() => MyTodoAppState();
 }
 
-class _MyStatefulApp2State extends State<MyStatefulApp2> {
-  final Dio _dio = Dio();
-  String _responseText = "서버 응답이 여기에 표시됩니다";
+class MyTodoAppState extends State<MyTodoApp> {
+  final Dio dio = Dio();
+  List<dynamic> todoList = [];
 
-  void _sendTodo() async {
+  @override
+  void initState() {
+    super.initState();
+    fetchTodos();
+  }
+
+  void fetchTodos() async {
     try {
-      // 보낼 데이터 정의
-      Map<String, dynamic> todoData = {
-        "title": "운동하기",
-        "content": "헬스장 가서 유산소 30분",
-        "done": false,
-      };
-
-      // POST 요청 보내기
-      final response = await _dio.post(
-        "http://localhost:8080/day04/todos", // 에뮬레이터는 10.0.2.2 사용! // 192.168.75.101
-        data: todoData
-      );
-
-      // 결과를 화면에 출력
-      setState(() {
-        _responseText = "응답: ${response.data}";
-      });
+      final res = await dio.get("http://localhost:8080/day04/todos");
+      setState( () {todoList = res.data; } );
     } catch (e) {
-      setState(() {
-        _responseText = "에러 발생: $e";
-      });
+      setState( () {todoList = []; } );
     }
   }
 
@@ -44,17 +33,23 @@ class _MyStatefulApp2State extends State<MyStatefulApp2> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("할 일 등록 예제")),
-        body: Center(
-          child: Column(
-            children: [
-              Text(_responseText),
-              ElevatedButton(
-                onPressed: _sendTodo,
-                child: Text("할 일 등록하기"),
+        appBar: AppBar(title: Text("할 일 목록")),
+        body: ListView(
+          // children: [
+          //   for (int i = 0; i < todoList.length; i++)
+          //     ListTile(
+          //       title: Text(todoList[i]['title']),
+          //       subtitle: Text(  "${todoList[i]['content']}\n상태: ${todoList[i]['done']}\n날짜: ${todoList[i]['createAt']}",   ),
+          //     ),
+          // ],
+          children: todoList.map((t) {
+            return ListTile(
+              title: Text(t['title']),
+              subtitle: Text(
+                "${t['content']}\n상태: ${t['done']}\n날짜: ${t['createAt']}",
               ),
-            ],
-          ),
+            );
+          }).toList(),
         ),
       ),
     );

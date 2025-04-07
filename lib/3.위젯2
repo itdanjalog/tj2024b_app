@@ -1,0 +1,45 @@
+✅ StatelessWidget이란?
+✅ 1. 정의
+    StatelessWidget은 **상태(state)**가 없는, 변하지 않는 UI를 만들 때 사용하는 위젯이에요.
+    📌 즉, 화면에 한 번 그려지고 끝나는 고정된 구조를 만들 때 사용해요.
+
+✅ 1. 정의 (정확히 뭐예요?)
+    **StatefulWidget**이란?
+    👉 "상태(state)"가 바뀔 수 있는 위젯을 만들고 싶을 때 사용하는 Flutter 위젯이야!
+
+
+✅ 2. 목적 (왜 만들어요?)
+    우리가 앱을 만들다 보면 이런 상황이 생겨버튼을 누르면 숫자가 올라가야 해요
+    글자를 입력하면 그에 따라 화면이 바뀌어요
+    탭을 바꾸면 화면 내용이 달라져야 해요
+    이처럼, "변하는 화면", **"변하는 데이터"**가 필요할 때
+    👉 StatelessWidget은 쓸 수 없고
+    👉 StatefulWidget이 필요해요!
+
+✅ 3. 사용하는 이유
+    상황	                        StatelessWidget	StatefulWidget
+    한 번만 그리고 끝나는 화면	        ✅ 사용 가능	❌ 비효율적
+    버튼 클릭 후 숫자 증가	        ❌ 불가능	✅ 꼭 필요
+    입력값 따라 반응하는 화면	        ❌ 불가능	✅ 사용해야 함
+
+✅ 전체 흐름 요약
+    createState() 👉 상태 관리 클래스를 생성해줌
+    initState() 👉 위젯이 처음 화면에 나올 때 딱 1번 실행됨
+    setState() 👉 값이 바뀌었을 때 화면을 다시 그려줌
+
+함수명	역할 설명
+    createState()	상태 클래스(State)를 생성
+    initState()	위젯이 처음 나타날 때 한 번 실행됨
+    build()	UI를 실제로 그리는 함수
+    setState()	데이터 변경 후 UI 갱신
+    dispose()	위젯이 사라질 때 리소스 정리 (예: 컨트롤러 닫기)
+
+[StatefulWidget]
+      ↓ createState()
+[_MyAppState 클래스 생성]
+      ↓ initState()  ← (한번만 실행)
+  [UI build 실행됨]
+      ↓
+[버튼 누름 → 데이터 변경]
+      ↓ setState()
+  [UI build 다시 실행됨]
