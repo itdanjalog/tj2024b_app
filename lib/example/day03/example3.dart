@@ -25,7 +25,7 @@ class MyAppState extends State< MyApp >{
         "content" : "매일10분달리기" , "done" : "false" }; // 샘플 데이터
 
       final response = await dio.post(
-          "http://192.168.40.9:8080/day04/todos" ,
+          "http://localhost:8080/day04/todos" ,
           data : sendData ); // dio를 이용하여 POST 통신한다.
 
       final data = response.data; // 응답 에서 body(본문) 결과만 추출
@@ -40,24 +40,48 @@ class MyAppState extends State< MyApp >{
     }
   } // f end
 
+  // *  dio 라이브러리 이용하여 REST 통신 하는 함수
+  dynamic todoList = [];  // 빈 리스트 선언
+  // dynamic , List<dynamic> , * List<Map<String,dynamic> *
+
+  void todoGet()  async {
+    try{
+      final response = await dio.get("http://localhost:8080/day04/todos");
+      final data = response.data;
+      print( data );
+      // 응답 결과를 상태변수에 대입한다. .setState()
+      setState(() {
+        todoList = data; // 빈 리스트에 응답 결과를 대입한다.
+      });
+    }catch(e){
+      print(e);
+    }
+  } // f end
+
   @override // setState 실행 될때 마다 다시 실행 된다.
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body : Center(
           child: Column(
+
             children: [
               Text( responseText ), // 텍스트 위젯 
               TextButton( // 버튼 위젯 
                   onPressed : todoSend , // 클릭했을때 이벤트 
                   child: Text("자바통신") // 버튼표시할 텍스트
               ),
-            ],
+              OutlinedButton(
+                  onPressed: todoGet,
+                  child: Text("자바통신2")
+              )
+            ], // 리스트 end
+
           ),
         )
       )
     );
-  }
-}
+  } // f end
+} // c end
 
 
