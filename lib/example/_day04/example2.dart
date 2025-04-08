@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 
 void main(){
   runApp(BasicFormExample());
@@ -24,17 +24,17 @@ class _BasicFormExampleState extends State<BasicFormExample> {
   final jobList = ['개발자', '디자이너', '기획자'];
 
 
-  File? _imageFile;
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      setState(() {
-        _imageFile = File(picked.path);
-      });
-    }
-  }
+  // File? _imageFile;
+  //
+  // Future<void> _pickImage() async {
+  //   final picker = ImagePicker();
+  //   final picked = await picker.pickImage(source: ImageSource.gallery);
+  //   if (picked != null) {
+  //     setState(() {
+  //       _imageFile = File(picked.path);
+  //     });
+  //   }
+  // }
 
   void onEvent(){
     print( controller.text );
