@@ -11,19 +11,18 @@ class _EditPageState extends State<EditPage> {
   final contentController = TextEditingController();
   Dio dio = Dio();
 
-  int? todoId;
+  int todoId = 0;
+  bool isDone = false; // ✅ done 상태 저장용
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final todo = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // ModalRoute.of(context)	현재 context에 해당하는 라우트(Route)를 가져옵니다. 즉, 이 페이지(화면)가 어떤 라우트를 통해 열렸는지 확인하는 거예요.
-    // !	이건 null 아님을 확신한다는 뜻입니다. 즉, "이건 무조건 존재할 거야!" 라고 Dart에게 말하는 거죠. (만약 실제로 null이면 앱이 튕깁니다.)
-    // .settings.arguments	라우트에 전달된 arguments 값을 가져옵니다. 보통 이전 화면에서 Navigator.pushNamed(..., arguments: ...)처럼 전달된 데이터예요.
-    // as Map<String, dynamic>	arguments의 자료형을 명시적으로 Map<String, dynamic>으로 캐스팅(변환)합니다. 안 그러면 Dart가 정확한 필드(['title'], ['id'] 등)를 모른다고 에러를 낼 수 있어요.
+
     todoId = todo['id'];
     titleController.text = todo['title'];
     contentController.text = todo['content'];
+    isDone = todo['done']; // ✅ done 상태 받아오기
   }
 
   void updateTodo() async {
@@ -34,19 +33,12 @@ class _EditPageState extends State<EditPage> {
           "id": todoId,
           "title": titleController.text,
           "content": contentController.text,
-          "done": false,
+          "done": isDone, // ✅ 입력한 done 값 전송
         },
       );
 
-      if (response.data != null ) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('수정이 완료되었습니다.'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.pushNamed(context, "/" ); // 이전 페이지(Home)로 돌아가기
+      if (response.data != null) {
+        Navigator.pushNamed(context, "/");
       } else {
         print("수정 실패: ${response.data}");
       }
@@ -62,6 +54,7 @@ class _EditPageState extends State<EditPage> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: titleController,
@@ -72,7 +65,26 @@ class _EditPageState extends State<EditPage> {
               controller: contentController,
               decoration: InputDecoration(labelText: '내용'),
             ),
+            SizedBox(height: 20),
+
+            // ✅ done 상태 설정 스위치
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('완료 여부'),
+                Switch(
+                  value: isDone,
+                  onChanged: (value) {
+                    setState(() {
+                      isDone = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+
             SizedBox(height: 30),
+
             ElevatedButton(
               onPressed: updateTodo,
               child: Text("수정하기"),

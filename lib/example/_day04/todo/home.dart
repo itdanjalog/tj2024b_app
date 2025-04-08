@@ -39,13 +39,13 @@ class _HomePageState extends State<Home> {
       );
 
       if (response.data == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('할일이 삭제 되었습니다.'),
-            duration: Duration(seconds: 3),
-            backgroundColor: Colors.red, // 배경색 변경
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('할일이 삭제 되었습니다.'),
+        //     duration: Duration(seconds: 3),
+        //     backgroundColor: Colors.red, // 배경색 변경
+        //   ),
+        // );
         // 삭제 성공 시 목록 다시 불러오기
         todoGet();
       } else {
