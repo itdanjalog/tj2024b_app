@@ -42,4 +42,7 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--  apk 필드시 Flutter에서 Dio 등 HTTP 요청을 하려면 Android 앱에 인터넷 권한이 있어야 합니다.  -->
+    <!-- android/app/src/main/AndroidManifest.xml -->
 </manifest>
