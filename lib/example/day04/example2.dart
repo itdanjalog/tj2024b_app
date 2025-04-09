@@ -44,20 +44,22 @@ class MyAppState extends State< MyApp >{
               TextField( maxLength: 30 , controller: controller2, ), // 텍스트 입력 위젯 , 최대 입력 글자수 제한
               SizedBox( height: 30,),
 
-              TextField( maxLines: 5 , controller: controller3, ), // 최대 입력 줄수 제한 , 입력에 따라 자동 확장 된다.
+              TextField(
+                maxLines: 5 ,  // 최대 입력 줄수 제한 , 입력에 따라 자동 확장 된다.
+                controller: controller3,
+                decoration: InputDecoration( labelText: "가이드 텍스트"),
+              ),
               SizedBox( height: 30,),
 
               TextButton( // 텍스트 이벤트버튼
                   onPressed: onEvent,
                   child: Text("클릭시 입력값을 출력합니다."),
               )
-
             ],
           ),
         )
       ),
     );
-
   }
 } // class end
 
