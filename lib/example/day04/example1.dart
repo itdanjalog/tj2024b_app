@@ -18,6 +18,7 @@ void main(){
     )
   );
 } // main end
+
 // 2-1. 앱 화면 만들기. 2가지 선택사항 : 1.상태없는 : StatelessWidget , 2.상태있는 : StatefulWidget
 class Home extends StatelessWidget{
   @override
@@ -38,6 +39,7 @@ class Home extends StatelessWidget{
     );
   }
 }
+
 // 2-2 앱 화면 만들기 . 2가지 선택사항 : 1.상태없는 : StatelessWidget , 2.상태있는 : StatefulWidget
 class Page1 extends StatelessWidget{
   @override
