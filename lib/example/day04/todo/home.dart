@@ -33,6 +33,15 @@ class _HomeState extends State<Home>{
     todoFindAll(); // 해당 위젯이 최초로 열렸을때 자바에게 할일 목록 조회 함수 호출 
   }
 
+  // 5. 삭제 이벤트 함수
+  void todoDelete( int id ) async {
+    try{
+      final response = await dio.delete('http://localhost:8080/day04/todos?id=$id');
+      final data = response.data;
+      if( data == true ){ todoFindAll(); } // 삭제 성공시 할일목록 다시 호출 하기.
+    }catch(e){ print(e); }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,13 +57,59 @@ class _HomeState extends State<Home>{
             ),
 
             // (2) 간격
-            SizedBox( height: 30 ,)
+            SizedBox( height: 30 ,) ,
 
             // (3) ListView 이용한 할일 목록 출력
+            // 자바로부터 가져온 할일목록을 map 함수를 이용하여 반복해서 Card 형식의 위젯 만들기
+            Expanded( // Column 위젯 안에서 ListView 사용시 Expanded 위젯 안에서 사용한다.
+                child: ListView( // ( <ol> )ListView 위젯은 높이 100%의 자동 세로 스크롤 지원하는 위젯
+                  // children: [] // [] 대신에 map 반복문
+                  children: todolist.map( (todo){
+                    // todolist <==> [ { key : value , key : value } , { key : value , key : value }  ]
+                    // todo  <==> { key : value , key : value }
+                    // todo['key']  <==> value
+                    return Card ( child: ListTile(
+                        title: Text( todo['title'] ) , // 제목
+                        subtitle: Column(
+                          children: [ // dart 언어 에서 문자와 변수를 같이 출력 하는 방법
+                            // 방법1 : 변수값만 출력할 경우에는  , " 문자열 $변수명 "
+                            // 방법2 : 변수안에 key의 값을 출력할 경우에는 , " 문자열 ${ 변수명['key'] }"
+                            // { key : value , key : value , key : value }
+                            Text( "할일내용 : ${todo['content'] }" ),
+                            Text( "할일상태 : ${todo['done'] }" ),
+                            Text( "등록일 : ${todo['createAt'] }" )
+                          ],
+                        ),
+                        // trailing : ListTile 오른쪽 끝에 표시되는 위젯
+                        trailing: IconButton( onPressed: ()=>{ todoDelete( todo['id'] ) } , icon: Icon( Icons.delete ) ),
 
+                      ) // ListTtile end
+                    ); // ;(세미콜론) return 마다
+
+                  } ).toList(), // map 결과를 toList() 함수를 이용하여 List 타입으로 변환
+                )
+            ) // Expanded end
           ],
         ),
       ) // Center end
     );
   }
 }
+
+
+/*
+
+Expanded( // Column 위젯 안에서 ListView 사용시 Expanded 위젯 안에서 사용한다.
+    child: ListView( // ( <ol> )ListView 위젯은 높이 100%의 자동 세로 스크롤 지원하는 위젯
+      children: [
+        ListTile( title: Text("항목1"), ) , // ( <li> )
+        ListTile( title: Text("항목2"), ) , // ( <li> )
+      ],
+    )
+)
+
+리스트명.map( (반복변수명){
+  return 위젯();
+}).toList()
+
+*/
