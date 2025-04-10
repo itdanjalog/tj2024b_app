@@ -81,8 +81,13 @@ class _HomeState extends State<Home>{
                           ],
                         ),
                         // trailing : ListTile 오른쪽 끝에 표시되는 위젯
-                        trailing: IconButton( onPressed: ()=>{ todoDelete( todo['id'] ) } , icon: Icon( Icons.delete ) ),
-
+                        trailing : Row( // 하위 위젯들을 가로 배치 vs Column
+                          mainAxisSize : MainAxisSize.min , // Row 배치 방법 , 오른쪽 위젯들의 넓이를 자동으로 최소 크기 할당
+                          children: [ // Row 위젯의 자식 들
+                            IconButton( onPressed: ()=>{ Navigator.pushNamed(context , "/detail" , arguments : todo['id'] ) }, icon: Icon(Icons.info) , ) ,
+                            IconButton( onPressed: ()=>{ todoDelete( todo['id'] ) } , icon: Icon( Icons.delete ) ),
+                          ],
+                        )
                       ) // ListTtile end
                     ); // ;(세미콜론) return 마다
 

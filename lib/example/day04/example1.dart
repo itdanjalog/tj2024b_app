@@ -2,7 +2,6 @@
 // 위젯명( 속성명 : 위젯명 , 속성명 : 위젯명 );             = 객체
 // vs new 클래스명( 매개변수 , 매개변수 , 매개변수 );       = 객체
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // 1. 플러터 시작 , 시작점 에서 runApp( ) 에서 최초로 실행할 위젯의 객체 대입
 void main(){
