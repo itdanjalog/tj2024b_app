@@ -44,6 +44,22 @@ class _UpdateSate extends State<Update> { // 클래스명 앞에 _ 언더바는 
   TextEditingController contentController = TextEditingController();
   // 완료 여부를 저장하는 상태변수 , 컨트롤러 없이 직접 렌더링
   bool done = true;
+  // 4. 현재 수정된 값으로 자바에게 수정처리 요청하기.
+  void todoUpdate(  ) async{
+    try{
+      final sendData = {
+        "id" : todo['id'], // 기존의 id 가져온다.
+        "title" : titleController.text, // 수정할 입력받은 제목 을 가져온다.
+        "content" : contentController.text, // 수정할 입력받은 내용 을 가져온다.
+        "done" : done , // 수정된 할일 상태
+      };// 수정에 필요한 데이터
+      final response =  await dio.put("http://192.168.40.9:8080/day04/todos" , data : sendData );
+      final data = response.data;
+      if( data != null ){  // 만약에 응답결과가 null 아니면 수정 성공
+        Navigator.pushNamed(context, "/" ); // home 위젯으로 이동
+      }
+    }catch(e){ print(e); }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +93,7 @@ class _UpdateSate extends State<Update> { // 클래스명 앞에 _ 언더바는 
             ),
             
             SizedBox( height: 20,) ,
-            OutlinedButton(onPressed: ()=>{}, child: Text("수정하기") ),
+            OutlinedButton( onPressed: todoUpdate, child: Text("수정하기") ),
           ],
         ),
       ),
