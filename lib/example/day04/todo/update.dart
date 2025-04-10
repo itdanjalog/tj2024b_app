@@ -28,16 +28,68 @@ class _UpdateSate extends State<Update> { // 클래스명 앞에 _ 언더바는 
     try{
       final response = await dio.get("http://192.168.40.9:8080/day04/todos/view?id=$id");
       final data = response.data;
-      setState(() {  todo = data; });
+      setState(() {
+        todo = data;
+        // 입력컨트롤러에 초기값 대입하기.
+        titleController.text = data['title'];
+        contentController.text = data['content'];
+        done = data['done'];
+      });
       print( todo );
     }catch(e){ print( e ); }
   }
+
+  // 3. 입력컨트롤러 상태 변수
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+  // 완료 여부를 저장하는 상태변수 , 컨트롤러 없이 직접 렌더링
+  bool done = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar( title: Text("수정 화면 "),),
-      body: Center( child: Text("수정 본문"),),
-    );
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox( height: 20,) ,
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration( labelText: "제목"),
+              maxLength: 30,
+            ),
+
+            SizedBox( height: 20,) ,
+            TextField(
+              controller: contentController,
+              decoration: InputDecoration( labelText: "내용"),
+              maxLines: 3,
+            ),
+
+            SizedBox( height: 20,) ,
+            Text("완료 여부"),
+            Switch( // 스위치 위젯 , on/off 역할
+                value: done, // 현재 스위치 값 , true 또는 false
+                onChanged : (value)=>{ setState((){ done = value; }) },  // 스위치 값이 변경 되었을때
+                // onChanged : (변경된값){ setState(() { 상태변수 = 변경된값; }); }, // setState(){} 라이브러리 이므로 => 생략된 상태
+                // 또는
+                // onChanged : (변경된값)=>{ setState(() { 상태변수 = 변경된값; }) }, // => 사용시에는 ; 생략 가능 
+            ),
+            
+            SizedBox( height: 20,) ,
+            OutlinedButton(onPressed: ()=>{}, child: Text("수정하기") ),
+          ],
+        ),
+      ),
+    ); // scaffold end
   }
 }
+
+
+
+
+
+
+
+
+
