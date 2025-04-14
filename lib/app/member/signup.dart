@@ -30,7 +30,7 @@ class _SignupState extends State<Signup>{
         padding : EdgeInsets.all( 30 ), // EdgeInsets.all() : 상하좌우 모두 적용되는 안쪽 여백
         margin : EdgeInsets.all( 30 ) , // EdgeInsets.all() : 상하좌우 모두 적용되는 바깥 여백
         child: Column( // 세로배치 위젯
-          mainAxisAlignment: MainAxisAlignment.center, //가로 가운데 정렬
+          mainAxisAlignment: MainAxisAlignment.center, // 주 축으로 가운데 정렬( Column 이면 세로 , Row이면 가로 )
           children: [ // 하위 위젯
             TextField(
               controller: emailControl,
