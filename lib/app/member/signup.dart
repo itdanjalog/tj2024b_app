@@ -1,4 +1,5 @@
 // signup.dart : 회원가입 페이지
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 class Signup extends StatefulWidget{
   @override
@@ -16,11 +17,18 @@ class _SignupState extends State<Signup>{
   void onSignup() async{
     // 1.자바에게 보낼 데이터 준비.
     final sendData = {
-      'email' : emailControl.text, // 입력 컨트롤러에 입력된 값 가져오기
-      'pwd' : pwdControl.text,
-      'name' : nameControl.text,
+      'memail' : emailControl.text, // 입력 컨트롤러에 입력된 값 가져오기
+      'mpwd' : pwdControl.text,
+      'mname' : nameControl.text,
     }; print( sendData ); // 확인
-
+    // 2.
+    try {
+      Dio dio = Dio();
+      final response = await dio.post( "http://localhost:8080/member/signup", data: sendData);
+      final data = response.data;
+      if (data) { print("회원가입 성공"); }
+      else {   print("회원가입 실패");  }
+    }catch(e){print(e);}
   } // f end
 
   @override
