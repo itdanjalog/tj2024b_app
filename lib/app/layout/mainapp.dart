@@ -1,5 +1,6 @@
 // * mainapp.dart : 레이아웃 구성 하는 파일
 import 'package:flutter/material.dart';
+import 'package:tj2024b_app/app/member/signup.dart';
 class MainApp extends StatefulWidget{
   @override
   State<StatefulWidget> createState() { return _MainAppState(); }
@@ -12,14 +13,14 @@ class _MainAppState extends State<MainApp>{
     Text("홈 페이지"),
     Text("게시물1 페이지"),
     Text("게시물2 페이지"),
-    Text("내정보 페이지"),
+    Signup() //Text("내정보 페이지"),
   ];
   // 2. 페이지 상단 제목 리스트
   List<String> pageTitle = [
     '홈' ,
     '게시물1' ,
     '게시물2' ,
-    '내정보'
+    '내정보(회원가입)'
   ];
   // 3. 현재 클릭된 페이지 번호 : 상태 변수
     // 0 = 홈 , 1 : 게시물 , 2:내정보
@@ -62,7 +63,7 @@ class _MainAppState extends State<MainApp>{
           BottomNavigationBarItem(icon: Icon(Icons.home) , label : '홈'), // 아이콘 위젯
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '게시물1' ),
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "게시물2"),
-          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보"),
+          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보(회원가입)"),
         ],
       ) // 바텀 end
 
