@@ -26,7 +26,7 @@ class _UpdateSate extends State<Update> { // 클래스명 앞에 _ 언더바는 
   Map< String, dynamic > todo = {}; // JSON 타입은 key은 무조건 문자열 그래서 String , value은 다양한 자료타입 이므로 dynamic(동적타입)
   void todoFindById( int id ) async {
     try{
-      final response = await dio.get("http://192.168.40.9:8080/day04/todos/view?id=$id");
+      final response = await dio.get("https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/day04/todos/view?id=$id");
       final data = response.data;
       setState(() {
         todo = data;
@@ -53,7 +53,8 @@ class _UpdateSate extends State<Update> { // 클래스명 앞에 _ 언더바는 
         "content" : contentController.text, // 수정할 입력받은 내용 을 가져온다.
         "done" : done , // 수정된 할일 상태
       };// 수정에 필요한 데이터
-      final response =  await dio.put("http://192.168.40.9:8080/day04/todos" , data : sendData );
+      //final response =  await dio.put("http://192.168.40.9:8080/day04/todos" , data : sendData );
+      final response =  await dio.put("https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/day04/todos" , data : sendData );
       final data = response.data;
       if( data != null ){  // 만약에 응답결과가 null 아니면 수정 성공
         Navigator.pushNamed(context, "/" ); // home 위젯으로 이동

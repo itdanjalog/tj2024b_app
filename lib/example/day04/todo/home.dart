@@ -16,7 +16,8 @@ class _HomeState extends State<Home>{
   // 3. 자바와 통신 하여 할일 목록을 조회하는 함수 선언
   void todoFindAll() async{
     try{
-      final response = await dio.get( "http://192.168.40.9:8080/day04/todos" );
+      //final response = await dio.get( "http://192.168.40.9:8080/day04/todos" );
+      final response = await dio.get( "https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/day04/todos");
       final data = response.data;
       // 조회 결과 없으면 [] , 조회 결과가 있으면 [ {} , {} ,{} ]
       // setState 이용하여 재 렌더링한다.
@@ -36,7 +37,8 @@ class _HomeState extends State<Home>{
   // 5. 삭제 이벤트 함수
   void todoDelete( int id ) async {
     try{
-      final response = await dio.delete('http://192.168.40.9:8080/day04/todos?id=$id');
+      //final response = await dio.delete('http://192.168.40.9:8080/day04/todos?id=$id');
+      final response = await dio.delete( "https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/day04/todos?id=$id");
       final data = response.data;
       if( data == true ){ todoFindAll(); } // 삭제 성공시 할일목록 다시 호출 하기.
     }catch(e){ print(e); }

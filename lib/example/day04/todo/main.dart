@@ -23,3 +23,23 @@ class MyApp extends StatelessWidget{
     );
   }
 }
+
+// 안드로이드 : apk 라는 확장자 파일로 만들기
+  // 방법1
+  // 1. 현재 프로젝트명 오른쪽 클릭 -> open in -> terminal
+  // 2. flutter build apk --release --target=lib/example/day04/todo/main.dart --target-platform=android-arm64
+  // * --target=lib/example/day04/todo/main.dart 생략시 자동으로 lib에 가까운 main.dart 빌드
+
+  // 방법2
+  // 상단메뉴 -> [build] -> [ flutter ] -> [ build apk ]
+
+  // --> 안드로이드폰에서 apk 실행시 https 적용이 안되는경우
+
+
+
+// IOS : ipa 라는 확장자 파일로 만들기 ( MAC 가능 )
+  // 1. 터미널 창 열기
+  // 2. flutter build ios --release --target=lib/example/day04/todo/main.dart
+
+
+
