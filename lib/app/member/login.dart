@@ -19,14 +19,28 @@ class _LoginState extends State<Login>{
   // * 등록 버튼 클릭시
   void onLogin() async{
       try {
+
+        // 로딩 다이얼로그 표시
+        showDialog(
+          context: context,
+          barrierDismissible: false, // 바깥 터치로 닫히지 않게
+          builder: (BuildContext context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+
         Dio dio = Dio();
         final response = await dio.post(
-          'http://localhost:8080/member/login',
+          'https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/member/login',
           data: {
             'memail': emailControl.text,
             'mpwd': pwdControl.text,
            },
         );
+
+        // 로딩 다이얼로그 닫기
+        Navigator.pop(context);
+
         print("결과 :  ${ response.data }" );
         if (  response.data != '') {
           final prefs = await SharedPreferences.getInstance();
@@ -34,16 +48,24 @@ class _LoginState extends State<Login>{
           await prefs.setString("token", response.data);
           print("로그인 성공! 토큰 저장 완료");
 
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("로그인 성공")),
+          );
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => MainApp(initialIndex: 0)),
           );
 
         } else {
-          print( response.data );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("로그인 실패")),
+          );
         }
       } catch (e) {
-        print( e );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("오류 발생: ${e.toString()}")),
+        );
       }
     }
 

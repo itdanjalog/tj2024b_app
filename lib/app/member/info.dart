@@ -27,7 +27,7 @@ class _InfoState extends State<Info> {
     dio.options.headers["Authorization"] = token;
 
     try {
-      final response = await dio.get("http://localhost:8080/member/info");
+      final response = await dio.get("https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/member/info");
       print('User info: ${response.data}');
     } catch (e) {
       print('Error: $e');
@@ -59,6 +59,10 @@ class _InfoState extends State<Info> {
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token'); // 저장된 토큰 삭제
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("로그아웃 되었습니다.")),
+    );
 
     // 로그아웃 후 로그인 화면으로 리디렉션
     Navigator.pushReplacement(

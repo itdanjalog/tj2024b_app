@@ -16,29 +16,57 @@ class _SignupState extends State<Signup>{
   TextEditingController nameControl = TextEditingController();
 
   // * 등록 버튼 클릭시
-  void onSignup() async{
-    // 1.자바에게 보낼 데이터 준비.
+  void onSignup() async {
     final sendData = {
-      'memail' : emailControl.text, // 입력 컨트롤러에 입력된 값 가져오기
-      'mpwd' : pwdControl.text,
-      'mname' : nameControl.text,
-    }; print( sendData ); // 확인
-    // 2.
+      'memail': emailControl.text,
+      'mpwd': pwdControl.text,
+      'mname': nameControl.text,
+    };
+
     try {
+
+      // 로딩 다이얼로그 표시
+      showDialog(
+        context: context,
+        barrierDismissible: false, // 바깥 터치로 닫히지 않게
+        builder: (BuildContext context) {
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
       Dio dio = Dio();
-      final response = await dio.post( "http://localhost:8080/member/signup", data: sendData);
+      final response = await dio.post(
+        "https://then-heloise-itdanjalog-5d2c7fb5.koyeb.app/member/signup",
+        data: sendData,
+      );
       final data = response.data;
-      if (data) { print("회원가입 성공");
+
+      // 로딩 다이얼로그 닫기
+      Navigator.pop(context);
+
+      if (data) {
+        // 성공 메시지
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("회원가입 성공!")),
+        );
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainApp(initialIndex: 0)),
         );
-
+      } else {
+        // 실패 메시지
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("회원가입 실패. 다시 시도해주세요.")),
+        );
       }
-      else {   print("회원가입 실패");  }
-    }catch(e){print(e);}
-  } // f end
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("오류 발생: ${e.toString()}")),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
