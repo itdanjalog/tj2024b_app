@@ -1,0 +1,30 @@
+[ SharedPreferences ]
+Flutter에서 간단한 데이터(설정, 토큰, 플래그 등)를 로컬에 저장할 수 있는 방법이에요.
+
+✅ 정의
+SharedPreferences는 앱을 종료했다가 다시 켜도 유지되는 데이터를 저장할 수 있는 저장소입니다.
+작은 용량의 key-value 쌍 데이터를 저장할 때 사용해요.
+
+✅ 사용 목적
+로그인 유지 , 앱 설정 저장 , 플래그 저장 , 간단한 캐시
+
+✅ 사용법 , https://pub.dev/
+    - 1. 의존성 추가
+    pubspec.yaml에 추가: shared_preferences: ^2.5.3
+    - 2. import
+    import 'package:shared_preferences/shared_preferences.dart';
+    - 3. 값 저장하기
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('counter', 10);
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('token', 'abc123');
+    - 4. 값 불러오기
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int counter = prefs.getInt('counter') ?? 0;
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    String? token = prefs.getString('token');
+    - 5. 값 삭제 or 전체 초기화
+    await prefs.remove('token'); // 특정 키 삭제
+    await prefs.clear(); // 모든 데이터 삭제
+
+✅ 주의사항 : SharedPreferences는 비동기이므로 await를 꼭 사용해야 해요.

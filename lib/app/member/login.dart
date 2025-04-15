@@ -1,44 +1,52 @@
 // signup.dart : 회원가입 페이지
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tj2024b_app/app/layout/mainapp.dart';
-import 'package:tj2024b_app/app/member/login.dart';
-class Signup extends StatefulWidget{
+import 'package:tj2024b_app/app/member/signup.dart';
+
+class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _SignupState();
+    return _LoginState();
   }
 }
-class _SignupState extends State<Signup>{
+class _LoginState extends State<Login>{
   // * 입력 컨트롤러 , 각 입력창에서 입력받은 값을 제어( 반환,호출 등등 )
   TextEditingController emailControl = TextEditingController();
   TextEditingController pwdControl = TextEditingController();
-  TextEditingController nameControl = TextEditingController();
 
   // * 등록 버튼 클릭시
-  void onSignup() async{
-    // 1.자바에게 보낼 데이터 준비.
-    final sendData = {
-      'memail' : emailControl.text, // 입력 컨트롤러에 입력된 값 가져오기
-      'mpwd' : pwdControl.text,
-      'mname' : nameControl.text,
-    }; print( sendData ); // 확인
-    // 2.
-    try {
-      Dio dio = Dio();
-      final response = await dio.post( "http://localhost:8080/member/signup", data: sendData);
-      final data = response.data;
-      if (data) { print("회원가입 성공");
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainApp(initialIndex: 0)),
+  void onLogin() async{
+      try {
+        Dio dio = Dio();
+        final response = await dio.post(
+          'http://localhost:8080/member/login',
+          data: {
+            'memail': emailControl.text,
+            'mpwd': pwdControl.text,
+           },
         );
+        print("결과 :  ${ response.data }" );
+        if (  response.data != '') {
+          final prefs = await SharedPreferences.getInstance();
+          print( response.data );
+          await prefs.setString("token", response.data);
+          print("로그인 성공! 토큰 저장 완료");
 
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MainApp(initialIndex: 0)),
+          );
+
+        } else {
+          print( response.data );
+        }
+      } catch (e) {
+        print( e );
       }
-      else {   print("회원가입 실패");  }
-    }catch(e){print(e);}
-  } // f end
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,19 +68,14 @@ class _SignupState extends State<Signup>{
               decoration: InputDecoration( labelText: "비밀번호" , border: OutlineInputBorder() ),
             ), // 입력 위젯 , 패드워드
             SizedBox( height: 20, ),
-            TextField(
-              controller: nameControl,
-              decoration: InputDecoration( labelText: "닉네임" , border: OutlineInputBorder() ),
-            ), // 입력 위젯 , 닉네임
-            SizedBox( height: 20, ),
-            ElevatedButton( onPressed: onSignup , child: Text("회원가입") ),
+            ElevatedButton( onPressed: onLogin , child: Text("로그인") ),
             SizedBox( height: 10, ),
             TextButton( onPressed: ()=>{
               Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Login() ),
+              MaterialPageRoute(builder: (context) => Signup()),
               )
-            }, child: Text("이미 가입된 사용자 이면 _로그인") )
+            }, child: Text("처음 방문한 사용자 이면 _회원가입") )
           ],
         ) ,
       )
