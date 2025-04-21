@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tj2024b_app/app/layout/NaviLogo.dart';
+import 'package:tj2024b_app/app/layout/mainapp.dart';
+import 'package:tj2024b_app/app/member/signup.dart';
 
 class Login extends StatefulWidget{
   @override
@@ -24,6 +27,12 @@ class _LoginState extends State<Login>{
         final prefs = await SharedPreferences.getInstance();
         // 2. 전역변수 값 추가
         await prefs.setString( 'token', data );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainApp()),
+        );
+
       } else {
         print("로그인 실패 ");
       }
@@ -33,6 +42,17 @@ class _LoginState extends State<Login>{
   @override
   Widget build(BuildContext context) {
     return Scaffold( // 레이아웃 위젯
+      appBar: AppBar( // 상단 메뉴
+        title: Row( // 가로배치
+            children: [
+              NaviLogo() ,
+              SizedBox( width: 20,), // 여백
+              Text( "로그인" ), // 텍스트는 이제 클릭되지 않습니다.
+            ]
+        ) ,
+        backgroundColor: Colors.white, // 배경색
+      ), // 헤더 end
+      
       body: Container( // 여백 제공하는 박스 위젯
         padding: EdgeInsets.all( 30 ) , // 박스 안쪽 여백
         margin: EdgeInsets.all( 30 ) , // 박스 바깥 여백
@@ -49,7 +69,12 @@ class _LoginState extends State<Login>{
             SizedBox( height: 20 , ),
             ElevatedButton( onPressed: onLogin , child: Text("로그인") ),
             SizedBox( height: 20 ,),
-            TextButton(onPressed: ()=>{}, child: Text("처음 방문이면 _회원가입") )
+            TextButton(onPressed: ()=>{
+              Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Signup() ),
+              )
+            }, child: Text("처음 방문이면 _회원가입") )
           ],
         ),// c end
       ), // c end 

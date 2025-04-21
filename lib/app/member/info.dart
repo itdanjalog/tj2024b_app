@@ -4,6 +4,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tj2024b_app/app/layout/mainapp.dart';
+import 'package:tj2024b_app/app/member/login.dart';
 
 class Info extends StatefulWidget{
   @override
@@ -22,8 +24,9 @@ class _InfoState extends State<Info>{
   void initState() { loginCheck(); }
 
   // 3. 로그인 상태를 확인 하는 함수
-  bool? isLogin; // Dart문법 중에 타입? 은 null 포함할 수 있다 뜻
+  bool? isLogin = null  ; // Dart문법 중에 타입? 은 null 포함할 수 있다 뜻
   void loginCheck() async{
+
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     if( token != null && token.isNotEmpty ){ // 전역변수에 (로그인)토큰이 존재하면
@@ -32,9 +35,10 @@ class _InfoState extends State<Info>{
         onInfo( token ); // 로그인 중일때 로그인 정보 요청 함수 실행
       });
     }else{
-      setState(() {
-        isLogin = false; print("비로그인 중");
-      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
     }
   }
   // 4. 로그인된 (회원) 정보 요청 , 로그인 중일때 실행
@@ -47,6 +51,7 @@ class _InfoState extends State<Info>{
       dio.options.headers['Authorization'] = token;
       final response = await dio.get( "http://localhost:8080/member/info" );
       final data = response.data; print( data );
+
       if( data != '' ) { // (로그인) 회원정보가 존재하면
         setState(() {
           memail = data['memail'];
@@ -56,6 +61,8 @@ class _InfoState extends State<Info>{
       }
     }catch(e){ print(e); }
   }
+
+
 
   // 5. 로그아웃 요청
   void logout() async{
@@ -69,34 +76,46 @@ class _InfoState extends State<Info>{
     final response = dio.get("http://localhost:8080/member/logout");
     // 3. 전역변수(클라이언트) 에도 토큰 삭제
     await prefs.remove('token');
-  }
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainApp()),
+        );
+
+    }
+
 
   // 2.
   @override
   Widget build(BuildContext context) {
+
+    // 로그인 상태가 확인되기 전, 대기 화면 표시
+    if (isLogin == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()), // 로딩 화면
+      );
+    }
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.all( 30 ),
-        padding: EdgeInsets.all( 30 ),
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(30),
+        padding: EdgeInsets.all(30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("회원번호 : $mno"),
-            SizedBox( height: 20,),
-            Text("아이디(이메일) : $memail  "),
-            SizedBox( height: 20,),
+            SizedBox(height: 20),
+            Text("아이디(이메일) : $memail"),
+            SizedBox(height: 20),
             Text("이름(닉네임) : $mname"),
-            SizedBox( height: 20,),
-            ElevatedButton(onPressed: logout , child: Text("로그아웃") ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: logout, // 상태 변경만 하는 logout 호출
+              child: Text("로그아웃"),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-
-
-
-

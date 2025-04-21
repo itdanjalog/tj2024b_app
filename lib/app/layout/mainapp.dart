@@ -4,6 +4,15 @@ import 'package:tj2024b_app/app/member/info.dart';
 import 'package:tj2024b_app/app/member/login.dart';
 import 'package:tj2024b_app/app/member/signup.dart';
 class MainApp extends StatefulWidget{
+
+  // 이건 MainApp 클래스의 **생성자(Constructor)**입니다.
+  // 이 생성자는 선택적(named) 파라미터를 사용해서 initialIndex 값을 외부에서 받을 수 있도록 해줍니다.
+
+  // MainApp({ ... })	중괄호 {}는 named parameter를 사용하겠다는 의미입니다. 호출할
+  // MainApp(initialIndex: 2)처럼 명시적으로 이름을 써서 값을 전달합니다.
+
+  // = 0	만약 initialIndex를 전달하지 않으면 기본값으로 0을 사용합니다.
+
   @override
   State<StatefulWidget> createState() { return _MainAppState(); }
 }
@@ -13,16 +22,16 @@ class _MainAppState extends State<MainApp>{
     // Widget : 여러 위젯들을 상속하는 상위 위젯(클래스)
   List<Widget> pages = [
     Text("홈 페이지"),
-    Info(), // Text("게시물1 페이지"),
-    Login(), // Text("게시물2 페이지"),
-    Signup() //Text("내정보 페이지"),
+    Text("게시물1 페이지"),
+    Text("게시물2 페이지"),
+    Info() //Text("내정보 페이지"),
   ];
   // 2. 페이지 상단 제목 리스트
   List<String> pageTitle = [
     '홈' ,
     '게시물1' ,
     '게시물2' ,
-    '내정보(회원가입)'
+    '내정보'
   ];
   // 3. 현재 클릭된 페이지 번호 : 상태 변수
     // 0 = 홈 , 1 : 게시물 , 2:내정보
@@ -65,7 +74,7 @@ class _MainAppState extends State<MainApp>{
           BottomNavigationBarItem(icon: Icon(Icons.home) , label : '홈'), // 아이콘 위젯
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '게시물1' ),
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "게시물2"),
-          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보(회원가입)"),
+          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보"),
         ],
       ) // 바텀 end
 
