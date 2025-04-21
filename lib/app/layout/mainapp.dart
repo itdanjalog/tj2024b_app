@@ -1,5 +1,6 @@
 // * mainapp.dart : 레이아웃 구성 하는 파일
 import 'package:flutter/material.dart';
+import 'package:tj2024b_app/app/member/info.dart';
 import 'package:tj2024b_app/app/member/login.dart';
 import 'package:tj2024b_app/app/member/signup.dart';
 class MainApp extends StatefulWidget{
@@ -12,7 +13,7 @@ class _MainAppState extends State<MainApp>{
     // Widget : 여러 위젯들을 상속하는 상위 위젯(클래스)
   List<Widget> pages = [
     Text("홈 페이지"),
-    Text("게시물1 페이지"),
+    Info(), // Text("게시물1 페이지"),
     Login(), // Text("게시물2 페이지"),
     Signup() //Text("내정보 페이지"),
   ];
