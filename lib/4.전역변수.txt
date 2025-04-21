@@ -9,7 +9,7 @@
             shared_preferences: ^2.5.3
         2. 의존성 새로고침 : 상단에 [pub get]
 
-    2. 전역객체 가져오기
+    2. 전역 객체 가져오기
         1. import 'package:shared_preferences/shared_preferences.dart';
         2. SharedPreferences 변수명 = await SharedPreferences.getInstance();
 
@@ -19,4 +19,6 @@
     4. 값 불러 오기
         await 변수명.get타입( 'key' );
 
+    5. 값 삭제 하기
+        await 변수명.remove( 'key' );
 
