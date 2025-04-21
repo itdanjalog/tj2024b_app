@@ -1,5 +1,6 @@
 // * mainapp.dart : 레이아웃 구성 하는 파일
 import 'package:flutter/material.dart';
+import 'package:tj2024b_app/app/member/login.dart';
 import 'package:tj2024b_app/app/member/signup.dart';
 class MainApp extends StatefulWidget{
   @override
@@ -12,7 +13,7 @@ class _MainAppState extends State<MainApp>{
   List<Widget> pages = [
     Text("홈 페이지"),
     Text("게시물1 페이지"),
-    Text("게시물2 페이지"),
+    Login(), // Text("게시물2 페이지"),
     Signup() //Text("내정보 페이지"),
   ];
   // 2. 페이지 상단 제목 리스트
