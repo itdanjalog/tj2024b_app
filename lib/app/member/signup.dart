@@ -1,6 +1,7 @@
 // signup.dart : 회원가입 페이지
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:tj2024b_app/app/member/login.dart';
 class Signup extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -26,7 +27,11 @@ class _SignupState extends State<Signup>{
       Dio dio = Dio();
       final response = await dio.post( "http://localhost:8080/member/signup", data: sendData);
       final data = response.data;
-      if (data) { print("회원가입 성공"); }
+      if (data) {
+        print("회원가입 성공");
+        // * 페이지 전환
+        Navigator.pushReplacement(context,  MaterialPageRoute(builder:  (context)=>Login() ) );
+      }
       else {   print("회원가입 실패");  }
     }catch(e){print(e);}
   } // f end
@@ -57,7 +62,13 @@ class _SignupState extends State<Signup>{
             ), // 입력 위젯 , 닉네임
             SizedBox( height: 20, ),
             ElevatedButton( onPressed: onSignup , child: Text("회원가입") ),
-            TextButton( onPressed: ()=>{}, child: Text("이미 가입된 사용자 이면 _로그인") )
+            SizedBox( height: 20, ),
+            TextButton( onPressed: ()=>{
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context)=> Login() )
+              )
+            }, child: Text("이미 가입된 사용자 이면 _로그인") )
           ],
         ) ,
       )

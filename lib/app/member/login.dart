@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tj2024b_app/app/layout/mainapp.dart';
+import 'package:tj2024b_app/app/member/signup.dart';
 
 class Login extends StatefulWidget{
   @override
@@ -12,6 +14,7 @@ class _LoginState extends State<Login>{
   // 1. 입력상자 컨트롤러
   TextEditingController emailControl = TextEditingController();
   TextEditingController pwdControl = TextEditingController();
+
   // 2. 자바와 통신
   void onLogin( ) async {
     try {
@@ -24,6 +27,13 @@ class _LoginState extends State<Login>{
         final prefs = await SharedPreferences.getInstance();
         // 2. 전역변수 값 추가
         await prefs.setString( 'token', data );
+
+        // * 로그인 성공시 페이지 전환
+        Navigator.pushReplacement(
+          context ,
+          MaterialPageRoute(builder: (context)=>MainApp() ),
+        );
+
       } else {
         print("로그인 실패 ");
       }
@@ -49,7 +59,11 @@ class _LoginState extends State<Login>{
             SizedBox( height: 20 , ),
             ElevatedButton( onPressed: onLogin , child: Text("로그인") ),
             SizedBox( height: 20 ,),
-            TextButton(onPressed: ()=>{}, child: Text("처음 방문이면 _회원가입") )
+            TextButton(onPressed: ()=>{ 
+              Navigator.pushReplacement(context, 
+                MaterialPageRoute(builder: (context) => Signup() )
+              )
+            }, child: Text("처음 방문이면 _회원가입") )
           ],
         ),// c end
       ), // c end 

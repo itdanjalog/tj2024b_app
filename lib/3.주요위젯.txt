@@ -4,7 +4,7 @@
     1. 초기화 경로 설정: initialRoute : "/"
     2. 라우트 경로 설정 : routes : { "경로" : (context)=>위젯명() }
     3.
-        - 이벤트로 특정 경로 호출/이동
+        - 이벤트로 특정 경로 호출/이동                  * 이전 화면으로 돌아 갈 수 있다.
             Navigator.pushNamed( context , "경로");
             * 경로 호출/이동시 인자값 전달 방법
                 Navigator.pushNamed( context , "경로" , arguments : 인자값 );
@@ -16,6 +16,12 @@
 
         - 이벤트로 이전 경로 호출
             Navigator.pop( context );
+
+        - 이벤트로 현재 화면을 대체하여 다른 페이지로 이동 , * 이전 화면으로 돌아 갈 수 없다.
+            Navigator.pushReplacement(
+                context ,
+                MaterialPageRoute( builder : (content) => 위젯명() )
+            );
 
 2. Scaffold()     : 헤더 , 푸터 , 본문 , 사이드바 등등 제공하는 위젯
     1. 헤더 : appBar : AppBar( )

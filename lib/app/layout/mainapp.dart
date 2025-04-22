@@ -13,16 +13,17 @@ class _MainAppState extends State<MainApp>{
     // Widget : 여러 위젯들을 상속하는 상위 위젯(클래스)
   List<Widget> pages = [
     Text("홈 페이지"),
-    Info(), // Text("게시물1 페이지"),
-    Login(), // Text("게시물2 페이지"),
-    Signup() //Text("내정보 페이지"),
+    Text("게시물1 페이지"),
+    Text("게시물2 페이지"),
+    Info() //Text("내정보 페이지"),
   ];
+
   // 2. 페이지 상단 제목 리스트
   List<String> pageTitle = [
     '홈' ,
     '게시물1' ,
     '게시물2' ,
-    '내정보(회원가입)'
+    '내정보'
   ];
   // 3. 현재 클릭된 페이지 번호 : 상태 변수
     // 0 = 홈 , 1 : 게시물 , 2:내정보
@@ -65,7 +66,7 @@ class _MainAppState extends State<MainApp>{
           BottomNavigationBarItem(icon: Icon(Icons.home) , label : '홈'), // 아이콘 위젯
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '게시물1' ),
           BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "게시물2"),
-          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보(회원가입)"),
+          BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보"),
         ],
       ) // 바텀 end
 
