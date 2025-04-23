@@ -20,7 +20,7 @@ class _LoginState extends State<Login>{
     try {
       Dio dio = Dio();
       final sendData = { "memail": emailControl.text, "mpwd": pwdControl.text};
-      final response = await dio.post( "http://localhost:8080/member/login", data: sendData);
+      final response = await dio.post( "http://192.168.40.9:8080/member/login", data: sendData);
       final data = response.data;
       if (data != ''){ // 로그인 성공시 토큰 SharedPreferences 저장하기.
         // 1. 전역변수 호출
