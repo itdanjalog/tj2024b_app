@@ -15,16 +15,15 @@ class _MainAppState extends State<MainApp>{
     // Widget : 여러 위젯들을 상속하는 상위 위젯(클래스)
   List<Widget> pages = [
     Text("홈 페이지"),
-    ProductList(),
     ProductRegister(),// Text("게시물2 페이지"),
+    ProductList(),
     Info() //Text("내정보 페이지"),
   ];
-
   // 2. 페이지 상단 제목 리스트
   List<String> pageTitle = [
     '홈' ,
-    '중고제품' ,
-    '게시물2' ,
+    '중고등록' ,
+    '중고목록' ,
     '내정보'
   ];
   // 3. 현재 클릭된 페이지 번호 : 상태 변수
@@ -66,8 +65,8 @@ class _MainAppState extends State<MainApp>{
         type: BottomNavigationBarType.fixed, // 4개이상일때 아이콘을 고정 크기 설정 , 아이콘이 많아지면 자동으로 확대/축소
         items: [ // 여러개 버튼 위젯들
           BottomNavigationBarItem(icon: Icon(Icons.home) , label : '홈'), // 아이콘 위젯
-          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '게시물1' ),
-          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "게시물2"),
+          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: '중고등록' ),
+          BottomNavigationBarItem(icon: Icon(Icons.forum) , label: "중고목록"),
           BottomNavigationBarItem(icon: Icon(Icons.person) , label: "내정보"),
         ],
       ) // 바텀 end
