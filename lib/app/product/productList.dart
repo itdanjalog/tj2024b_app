@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart'; // dio 패키지 import
+import 'package:dio/dio.dart';
+import 'package:tj2024b_app/app/product/productView.dart'; // dio 패키지 import
 
 // Product 모델 클래스 선언 제거됨
 
@@ -14,27 +15,48 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   // 상태 변수: Product 모델 대신 List<dynamic> 사용 (각 요소는 Map<String, dynamic>)
-  int? cno = 0;
+  int cno = 0;
+  int page= 1;
   List<dynamic> productList = [];
+  final ScrollController _scrollController = ScrollController(); // 스크롤 감지용 컨트롤러
+
 
   @override
   void initState() {
     super.initState();
-    _fetchProducts();
+    fetchProducts( page );
+
+    // 스크롤 리스너 추가
+    _scrollController.addListener(_onScroll);
+  }
+  // 스크롤 이벤트 처리 함수
+  void _onScroll() {
+    // 스크롤이 끝에 도달했고, 추가 로딩 가능하며, 현재 로딩 중이 아닐 때
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 ){ // 끝에서 200px 전에 로드 시작 (조절 가능)
+      fetchProducts( page + 1 ); // 다음 페이지 로드
+    }
   }
 
-  Future<void> _fetchProducts() async {
+  void fetchProducts( int currentPage ) async {
 
     try {
       final Dio dio = Dio();
       final response = await dio.get(
-        "http://192.168.40.9:8080/product/all?cno=$cno",
+        "http://211.195.164.203:8080/product/all?page=$currentPage",
       );
-      if (response.statusCode == 200) {
-          setState(() {
-            productList = response.data;
-          });
-      }
+
+      setState(() {
+        // productList = response.data;
+        page = currentPage;
+        if (page == 1) {
+          productList = response.data['content']; // 첫 페이지는 새로 로드
+        }else if( page > response.data['totalPages']){
+        }else{
+          productList.addAll(response.data['content']); // 다음 페이지는 기존 리스트에 추가
+        }
+      });
+
+
     } catch (e) {
       print('Error fetching products: $e');
     }
@@ -48,53 +70,48 @@ class _ProductListState extends State<ProductList> {
     }
 
     return ListView.builder(
+      controller: _scrollController, // 스크롤 컨트롤러 연결
       itemCount: productList.length,
       itemBuilder: (context, index) {
         // productList의 각 요소를 Map<String, dynamic>으로 캐스팅 (안전하게)
         final product = productList[index];
 
         // 이미지 리스트 추출 (null 및 타입 체크 포함)
-        final List<String> images = (product['images'] as List<dynamic>?)
-            ?.map((e) => e.toString()) // 각 요소를 String으로 변환
-            .toList() ?? // List<String>으로 변환
-            []; // null이면 빈 리스트
+        final List<dynamic> images =product['images'];
 
         String? imageUrl;
         if (images.isNotEmpty) {
-          imageUrl = 'http://192.168.40.9:8080/upload/${images[0]}'; // '/upload/' 경로는 서버 설정 확인
+          imageUrl = 'http://211.195.164.203:8080/upload/${images[0]}'; // '/upload/' 경로는 서버 설정 확인
         }else{
-          imageUrl = 'http://192.168.40.9:8080/upload/default.jpg'; //  이미지가 없으면.
+          imageUrl = 'http://211.195.164.203:8080/upload/default.jpg'; //  이미지가 없으면.
         }
 
         // UI 부분 (Card, Row, Image.network, Text 등)은 이전과 동일하게 구성
-        return Card(
+        return
+
+          InkWell(
+            onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    // ProductDetailPage 위젯으로 pno 전달
+                    builder: (context) => ProductView( pno: product['pno'] ),
+                  ),
+                );
+            },
+          child:  Card(
           margin: EdgeInsets.all(8.0),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   width: 100,
                   height: 100,
-                  child: imageUrl != null
-                      ? Image.network(
+                  child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                            : null,
-                      ));
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      print('Error loading image $imageUrl: $error');
-                      return Icon(Icons.broken_image, size: 50, color: Colors.grey);
-                    },
                   )
-                      : Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -115,6 +132,7 @@ class _ProductListState extends State<ProductList> {
               ],
             ),
           ),
+        ),
         );
       },
     );

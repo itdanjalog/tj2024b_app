@@ -59,7 +59,7 @@ class _ProductRegisterState extends State<ProductRegister> {
       // Dio POST 요청 (이전과 동일)
       final dio = Dio();
       dio.options.headers['Authorization'] = token;
-      final response = await dio.post( 'http://192.168.40.9:8080/product/register',  data: formData) ;
+      final response = await dio.post( 'http://211.195.164.203:8080/product/register',  data: formData) ;
       // 결과 처리 (이전과 동일)
       if (response.statusCode == 201 && response.data == true) {
         print("제품등록 성공");
