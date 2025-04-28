@@ -83,8 +83,8 @@ class _ProductListState extends State<ProductList>{
           // (4) 위젯
           return InkWell( // 해당 위젯의 하위 위젯을 클릭(탭:모바일 터치) 하면 '상세 페이지'로 이동 구현
             onTap: () => {   // 만약에 하위 위젯(Card) 을 클릭했을때 이벤트 발생
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context)=> ProductView() )
+              Navigator.push(context,                       // 위젯명( 인수1 , 인수2 );
+                MaterialPageRoute(builder: (context)=> ProductView( pno: product['pno'] ) )
               )
             } ,
             child: Card( 
