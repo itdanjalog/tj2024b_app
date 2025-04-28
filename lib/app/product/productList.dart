@@ -13,7 +13,7 @@ class _ProductListState extends State<ProductList>{
   int page = 1; // 현재 조회 중인 페이지 번호 갖는 상태변수 , 초기값 1
   List<dynamic> productList = []; // 자바서버로 부터 조회 한 제품(DTO) 목록 상태변수
   final dio = Dio(); // 자바서버 와 통신 객체
-  String baseUrl = "http://localhost:8080"; // 기본 자바서버의 URL 정의 // 환경에 따라 IP변경
+  String baseUrl = "http://192.168.40.9:8080"; // 기본 자바서버의 URL 정의 // 환경에 따라 IP변경
   // * 현재 스크롤의 상태( 위치/크기 등) 를 감지하는 컨트롤러
   // * 무한스크롤( 스크롤이 거의 바닥에 위치했을때 새로운 자료 요청 해서 추가 한다. )
   // .position : 현재 스크롤의 위치 반환 , .position.pixels : 위치를 픽셀로 반환 
@@ -82,15 +82,17 @@ class _ProductListState extends State<ProductList>{
             onTap: () => {  } , // 만약에 하위 위젯(Card) 을 클릭했을때 이벤트 발생
             child: Card( 
               margin: EdgeInsets.all( 15 ), // 바깥여백
-              child: Row(  // 가로 배치 ,
-                children: [ // 가로 배치할 위젯들
+              child: Padding(
+                  padding: EdgeInsets.all( 10 ), // 안쪽여백
+                  child: Row(  // 가로 배치 ,
+                    children: [ // 가로 배치할 위젯들
 
-                  Container( // 하위요소를 담을 박스(div)
-                    width: 100, height: 100, // 가로 세로 사이즈
-                    child: Image.network(  // 웹 이미지 출력 ( 이미지 위젯 ),
-                      imageUrl , // 이미지 경로 
-                      fit: BoxFit.cover, ), // 만약에 이미지가 구역보다 크면 비율유지 
-                  ),
+                      Container( // 하위요소를 담을 박스(div)
+                        width: 100, height: 100, // 가로 세로 사이즈
+                        child: Image.network(  // 웹 이미지 출력 ( 이미지 위젯 ),
+                          imageUrl , // 이미지 경로
+                          fit: BoxFit.cover, ), // 만약에 이미지가 구역보다 크면 비율유지
+                      ),
                   
                   SizedBox( width: 20 ,) , // 여백
 
@@ -109,7 +111,8 @@ class _ProductListState extends State<ProductList>{
                 ], 
               ), // Row end
             ), // Card end 
-          ); // InkWell end
+            )
+          );// InkWell end
         },
     ); // ListView end
   } // build end
