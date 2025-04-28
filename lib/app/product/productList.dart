@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:tj2024b_app/app/member/signup.dart';
+import 'package:tj2024b_app/app/product/productView.dart';
+import 'package:tj2024b_app/main.dart';
 
 class ProductList extends StatefulWidget{
   @override
@@ -79,9 +82,13 @@ class _ProductListState extends State<ProductList>{
           }
           // (4) 위젯
           return InkWell( // 해당 위젯의 하위 위젯을 클릭(탭:모바일 터치) 하면 '상세 페이지'로 이동 구현
-            onTap: () => {  } , // 만약에 하위 위젯(Card) 을 클릭했을때 이벤트 발생
+            onTap: () => {   // 만약에 하위 위젯(Card) 을 클릭했을때 이벤트 발생
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context)=> ProductView() )
+              )
+            } ,
             child: Card( 
-              margin: EdgeInsets.all( 15 ), // 바깥여백
+              margin: EdgeInsets.all( 12 ), // 바깥여백
               child: Padding(
                   padding: EdgeInsets.all( 10 ), // 안쪽여백
                   child: Row(  // 가로 배치 ,
