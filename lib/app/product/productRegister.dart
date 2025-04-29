@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductRegister extends StatefulWidget{
@@ -17,7 +18,34 @@ class _ProductRegister extends State< ProductRegister >{
   int? cno = 1; // 카테고리 번호 // 드롭다운
   final dio = Dio();
   final String baseUrl = "http://192.168.40.9:8080"; // 환경에 따라 변경
-  
+
+  List<dynamic> categoryList = []; // 카테고리 목록 [ { cno : 1 , cname:"전자~" } , { cno : 2  ~~~ } ]
+
+  @override // 위젯이 로드될때 딱 1번실행 함수.
+  void initState() { onCategory(); }
+
+  // 4. 이미지 피커 : 사용자의 파일을 플러터로 가져오기
+    // 1. pubspec.yamal 파일의 dependencies 추가 : image_picker: ^1.1.2
+  List<XFile> selectedImage = [] ; // 현재 선택된 이미지들을 저장하는 리스트
+  void onSelectImage() async{ // 이미지 선택 이벤트 함수
+    try{
+      ImagePicker picker = ImagePicker(); // 이미지 피커 객체 생성 , .pickMultiImage() 이미지 여러개 , .pickImage() 이미지 한개
+      List<XFile> pickedFiles = await picker.pickMultiImage(); // 사용자가 선택한 이미지들을 XFILE 파일으로 반환한다.
+        // XFile 인터페이스는 이미지들을 조작할 수 있는 메소드 제공한다.
+      if( pickedFiles.isNotEmpty ){ // 선택된 이미지가 존재하면 상태변수에 저장한다.
+        setState(() { selectedImage = pickedFiles;   });
+      }
+    }catch(e){ print(e); }
+  }
+
+  // 3. 카테고리 조회 요청 함수 (+위젯이 로드될때 실행)
+  void onCategory() async {
+    try{
+      final response = await dio.get("$baseUrl/product/category");
+      setState(() {   categoryList = response.data;  print(categoryList); });
+    }catch(e){ print( e );}
+  }
+
   // 2. 제품 등록 요청 함수 ( + FormData )
   void onRegister() async{
     try{
@@ -42,18 +70,46 @@ class _ProductRegister extends State< ProductRegister >{
     }catch(e){ print( e ); }
   }
 
+  // 5. 화면 반환
   @override
   Widget build(BuildContext context) {
+    // + 카테고리 드롭다운 위젯 함수 
+    Widget CategoryDropdown(){
+      // return DropdownButton( items : items , onChanged: onChanged );
+          // items : 드롭다운 안에 들어가는 여러개의 항목들
+          // 리스트.map( (반복변수){ return } ).toList()
+          // onChanged : 드롭다운 값의 선택이 변경 되었을때 이벤트 발생함수.
+          return DropdownButtonFormField( // 제네릭 <int> : value 에 들어가는 값 타입
+          value: cno, // 카테고리 번호 초기값
+          hint: Text("카테고리 선택") , // 가이드라인
+          decoration: InputDecoration( border: OutlineInputBorder() ), // 바깥 테두리
+          items: categoryList.map( (category){
+            return DropdownMenuItem<int>( // 제네릭 <int> : value 에 들어가는 값 타입
+              value: category['cno'],  // 드롭다운에서 값 선택시 반환되는 값
+              child: Text( category['cname'] ) ,  // 드롭다운 화면에 보이는 텍스트
+            );
+          }).toList(),
+          onChanged: ( value ){ setState(() { cno = value;  });} // 변경된/선택된 값을 cno에 대입
+      );
+    }
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all( 20 ),
         child: Column(
           children: [
+            CategoryDropdown(),
             TextField( controller: pnameController, ) ,
             SizedBox( height: 16 , ),
             TextField( controller: pcontentController, ) ,
             SizedBox( height: 16 , ),
             TextField( controller: ppriceController, ) ,
+            SizedBox( height: 16 , ),
+            TextButton.icon(
+              icon: Icon( Icons.add_a_photo ),
+              label: Text("이미지 선택 : ${ selectedImage.length }개 "),
+              onPressed: onSelectImage,
+            ),
             SizedBox( height: 16 , ),
             TextButton(onPressed: onRegister, child: Text("제품등록") ),
           ], // c end
