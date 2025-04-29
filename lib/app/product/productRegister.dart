@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -81,6 +83,7 @@ class _ProductRegister extends State< ProductRegister >{
   // 5. 화면 반환
   @override
   Widget build(BuildContext context) {
+
     // + 카테고리 드롭다운 위젯 함수 
     Widget CategoryDropdown(){
       // return DropdownButton( items : items , onChanged: onChanged );
@@ -101,6 +104,27 @@ class _ProductRegister extends State< ProductRegister >{
       );
     }
 
+    // (+) 선택한 이미지를 미리보기 제공 함수
+    Widget ImagePreview(){
+      return Container(
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal , // List 방향 , 기본값이 세로 , 가로 설정
+          itemCount: selectedImage.length, // 이미지 개수만큼 반복
+          itemBuilder: (context, index){ // 반복문
+            final XFile xFile = selectedImage[index]; // index 번째 xfile 꺼내기
+            return Padding(
+                padding: EdgeInsets.all(5), // 여백
+                child: SizedBox( 
+                  width: 100, height: 100 ,  // 이미지 사이즈 설정
+                  child: Image.file( File( xFile.path ) ), // 현재 index번째의 xfile 경로를 이미지로 출력
+                ),
+            );
+          },
+        ) ,
+      );
+    }
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all( 20 ),
@@ -118,6 +142,7 @@ class _ProductRegister extends State< ProductRegister >{
               label: Text("이미지 선택 : ${ selectedImage.length }개 "),
               onPressed: onSelectImage,
             ),
+            ImagePreview(),
             SizedBox( height: 16 , ),
             TextButton(onPressed: onRegister, child: Text("제품등록") ),
           ], // c end
