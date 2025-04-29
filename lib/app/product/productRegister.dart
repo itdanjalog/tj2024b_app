@@ -25,7 +25,7 @@ class _ProductRegister extends State< ProductRegister >{
   void initState() { onCategory(); }
 
   // 4. 이미지 피커 : 사용자의 파일을 플러터로 가져오기
-    // 1. pubspec.yamal 파일의 dependencies 추가 : image_picker: ^1.1.2
+    // *. pubspec.yamal 파일의 dependencies 추가 : image_picker: ^1.1.2
   List<XFile> selectedImage = [] ; // 현재 선택된 이미지들을 저장하는 리스트
   void onSelectImage() async{ // 이미지 선택 이벤트 함수
     try{
@@ -60,6 +60,14 @@ class _ProductRegister extends State< ProductRegister >{
       formData.fields.add( MapEntry("pcontent", pcontentController.text )); // 폼에 입력받은 제품설명 대입
       formData.fields.add( MapEntry("pprice", ppriceController.text ) );    // 폼에 입력받은 제품가격 대입
       formData.fields.add( MapEntry("cno", '${cno}' ) );                    // 폼에 입력받은 카테고리번호 대입
+      // (*) 현재 선택된 이미지들을 formData 에 담아주기.
+      for( XFile xFile in selectedImage ){
+        // Xfile 의 path : 파일경로 , Xfile 의 name : 파일이름 을 // dio의 multipartFile 이용하여 파일객체 만들기.
+        // XFile ---> multipartFile 변환
+        final file = await MultipartFile.fromFile( xFile.path , filename: xFile.name );
+        // dio의 multipartFile 객체를 폼 대입 , XFile 자체는 전송이 불가능하다.
+        formData.files.add( MapEntry("files", file ) ); // files 라는 이름으로 file(multipartFile)객체들을 대입한다.
+      }
       // 3. DIO 요청
       dio.options.headers['Authorization'] = token;  // 3-1 : HTTP Header( 통신 정보 )에 인증 정보 포함.
       final response = await dio.post("$baseUrl/product/register" , data : formData );

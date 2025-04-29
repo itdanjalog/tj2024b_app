@@ -34,7 +34,7 @@ class _SignupState extends State<Signup>{
     // 2.
     try {
       Dio dio = Dio();
-      final response = await dio.post( "http://localhost:8080/member/signup", data: sendData);
+      final response = await dio.post( "http://192.168.40.9:8080/member/signup", data: sendData);
       final data = response.data;
 
       Navigator.pop(context); // 가장 앞(가장 최근에 열린)에 있는 위젯 닫기 ( showDialog() : 팝업 창 )
