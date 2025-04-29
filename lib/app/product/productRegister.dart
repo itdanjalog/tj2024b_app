@@ -106,6 +106,7 @@ class _ProductRegister extends State< ProductRegister >{
 
     // (+) 선택한 이미지를 미리보기 제공 함수
     Widget ImagePreview(){
+      if( selectedImage.isEmpty ){ return SizedBox(); }//만약에 선택된 이미지가 없으면 빈칸
       return Container(
         height: 100,
         child: ListView.builder(
@@ -130,21 +131,37 @@ class _ProductRegister extends State< ProductRegister >{
         padding: EdgeInsets.all( 20 ),
         child: Column(
           children: [
+
             CategoryDropdown(),
-            TextField( controller: pnameController, ) ,
-            SizedBox( height: 16 , ),
-            TextField( controller: pcontentController, ) ,
-            SizedBox( height: 16 , ),
-            TextField( controller: ppriceController, ) ,
-            SizedBox( height: 16 , ),
+            SizedBox( height: 10 , ),
+
+            TextField(
+              controller: pnameController,
+              decoration: InputDecoration( labelText: "제품명" , border: OutlineInputBorder() ),
+            ) ,
+            SizedBox( height: 10 , ),
+
+            TextField( 
+              controller: pcontentController, 
+              maxLines: 3 , // 텍스트 줄 길이 
+              decoration: InputDecoration( labelText: "제품 설명" , border: OutlineInputBorder() ),
+            ) ,
+            SizedBox( height: 10 , ),
+
+            TextField(
+              controller: ppriceController,
+              decoration: InputDecoration( labelText: "제품 가격" , border: OutlineInputBorder() ),
+              keyboardType: TextInputType.number, // 키보드 기본 타입을 설정
+            ) ,
+            SizedBox( height: 10 , ),
             TextButton.icon(
               icon: Icon( Icons.add_a_photo ),
               label: Text("이미지 선택 : ${ selectedImage.length }개 "),
               onPressed: onSelectImage,
             ),
             ImagePreview(),
-            SizedBox( height: 16 , ),
-            TextButton(onPressed: onRegister, child: Text("제품등록") ),
+            SizedBox( height: 10 , ),
+            ElevatedButton(onPressed: onRegister, child: Text("제품등록") ),
           ], // c end
         ),// c end
       ), // c end
